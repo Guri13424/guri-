@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Neon Game Hub</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#050713;
+    color:white;
+    overflow:hidden;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+    color:white;
+    font-weight:bold;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* =====================================================
+LOGIN
+===================================================== */
+
+#authPage{
+    width:100vw;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:
+        radial-gradient(circle at 20% 20%,#16468b,transparent 35%),
+        radial-gradient(circle at 80% 80%,#751a8d,transparent 35%),
+        #050713;
+}
+
+.authBox{
+    width:400px;
+    max-width:92%;
+    padding:35px;
+
+    background:#0c1229ee;
+
+    border:1px solid #00eaff;
+
+    border-radius:22px;
+
+    box-shadow:
+        0 0 45px #00aaff33;
+}
+
+.logo{
+    text-align:center;
+    font-size:34px;
+    font-weight:bold;
+    color:#00eaff;
+    text-shadow:0 0 20px #00eaff;
+}
+
+.subtitle{
+    text-align:center;
+    color:#9ca9cd;
+    margin:10px 0 28px;
+}
+
+.inputGroup{
+    margin-bottom:17px;
+}
+
+label{
+    display:block;
+    margin-bottom:7px;
+    color:#cbd4ef;
+}
+
+input{
+    width:100%;
+    padding:13px;
+
+    background:#080d21;
+    color:white;
+
+    border:1px solid #33416c;
+    border-radius:9px;
+
+    outline:none;
+}
+
+input:focus{
+    border-color:#00eaff;
+}
+
+.mainButton{
+    width:100%;
+    padding:14px;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(135deg,#00c6ff,#792cff);
+
+    font-size:16px;
+}
+
+.switch{
+    text-align:center;
+    margin-top:18px;
+    color:#99a6ca;
+    font-size:14px;
+}
+
+.switch span{
+    color:#00eaff;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.message{
+    min-height:20px;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.error{
+    color:#ff5065;
+}
+
+.success{
+    color:#40ff9a;
+}
+
+/* =====================================================
+DASHBOARD
+===================================================== */
+
+#dashboard{
+    width:100vw;
+    height:100vh;
+    overflow:auto;
+
+    background:
+        radial-gradient(circle at 10% 20%,#152c6e,transparent 30%),
+        radial-gradient(circle at 90% 80%,#63166e,transparent 30%),
+        #050713;
+}
+
+.navbar{
+    height:65px;
+    padding:0 25px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:#080e22ee;
+    border-bottom:1px solid #26345c;
+}
+
+.navLogo{
+    color:#00eaff;
+    font-weight:bold;
+    font-size:22px;
+}
+
+.logout{
+    padding:9px 16px;
+    border-radius:8px;
+    background:#e93654;
+}
+
+.dashboard{
+    max-width:1100px;
+    margin:auto;
+    padding:45px 25px;
+}
+
+.welcome{
+    margin-bottom:35px;
+}
+
+.welcome h1{
+    font-size:42px;
+}
+
+.welcome span{
+    color:#00eaff;
+}
+
+.welcome p{
+    color:#9da8c7;
+    margin-top:8px;
+}
+
+.games{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+}
+
+.gameCard{
+    min-height:240px;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    border:1px solid #263b69;
+
+    background:#0b1229dd;
+
+    transition:.25s;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.gameCard:hover{
+    transform:translateY(-7px);
+    border-color:#00eaff;
+
+    box-shadow:
+        0 15px 40px #00bfff22;
+}
+
+.gameIcon{
+    font-size:55px;
+}
+
+.gameCard h2{
+    margin:10px 0;
+}
+
+.gameCard p{
+    color:#9ba7c5;
+    font-size:14px;
+}
+
+.play{
+    margin-top:20px;
+    padding:12px;
+
+    border-radius:9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #00c6ff,
+            #7130ff
+        );
+}
+
+/* =====================================================
+GAME AREA
+===================================================== */
+
+#gameArea{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    background:#02040b;
+}
+
+#gameCanvas{
+    width:100%;
+    height:100%;
+    display:block;
+}
+
+#gameHUD{
+    position:absolute;
+    top:15px;
+    left:15px;
+
+    padding:13px 17px;
+
+    background:#030817dd;
+
+    border:1px solid #00d9ff;
+
+    border-radius:12px;
+
+    line-height:1.6;
+
+    z-index:10;
+}
+
+.hudTitle{
+    color:#00eaff;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.back{
+    position:absolute;
+
+    top:15px;
+    right:15px;
+
+    padding:10px 16px;
+
+    background:#18233e;
+
+    border:1px solid #00cfff;
+
+    border-radius:9px;
+
+    z-index:20;
+}
+
+#gameInfo{
+    position:absolute;
+    bottom:15px;
+    left:50%;
+    transform:translateX(-50%);
+
+    padding:8px 15px;
+
+    border-radius:10px;
+
+    background:#000a;
+
+    color:#c5cde3;
+
+    font-size:13px;
+
+    z-index:10;
+}
+
+#gameOver{
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    text-align:center;
+
+    padding:35px;
+
+    background:#080e20f5;
+
+    border:2px solid #00eaff;
+
+    border-radius:20px;
+
+    box-shadow:0 0 50px #00d9ff44;
+
+    z-index:30;
+}
+
+#gameOver h1{
+    font-size:40px;
+    color:#00eaff;
+    margin-bottom:10px;
+}
+
+#gameOver button{
+    margin-top:20px;
+    padding:13px 25px;
+    border-radius:9px;
+
+    background:
+        linear-gradient(135deg,#00c6ff,#792cff);
+}
+
+/* =====================================================
+RESPONSIVE
+===================================================== */
+
+@media(max-width:600px){
+
+    .welcome h1{
+        font-size:32px;
+    }
+
+    .dashboard{
+        padding:30px 15px;
+    }
+
+}
+
+/* =====================================================
+   MOBILE / PC GAME UPGRADE
+   ===================================================== */
+#gameArea{touch-action:none}
+#gameCanvas{touch-action:none}
+#gameHUD{user-select:none}
+#gameInfo{max-width:calc(100vw - 30px);text-align:center}
+#touchControls{
+  position:absolute;
+  left:0; right:0; bottom:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 18px;
+  z-index:25;
+  pointer-events:none;
+}
+#touchControls button{
+  width:62px;height:62px;border-radius:50%;
+  background:#08152ee8;
+  border:1px solid #00dfff;
+  box-shadow:0 0 20px #00cfff44;
+  font-size:24px;
+  pointer-events:auto;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:none;
+}
+#touchControls button[data-control="jump"]{
+  width:74px;height:74px;
+}
+@media(min-width:801px){
+  #touchControls{display:none!important}
+}
+@media(max-width:600px){
+  #gameHUD{top:8px;left:8px;padding:9px 11px;font-size:12px}
+  .hudTitle{font-size:15px}
+  .back{top:8px;right:8px;padding:8px 11px;font-size:12px}
+  #gameInfo{bottom:92px;font-size:11px}
+  #gameOver{width:min(88vw,360px);padding:28px 20px}
+  #gameOver h1{font-size:32px}
+}
+</style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+AUTH PAGE
+===================================================== -->
+
+<div id="authPage">
+
+<div class="authBox">
+
+<div class="logo">
+✦ NEON GAME HUB
+</div>
+
+<div class="subtitle">
+Your games. Your profile. Your scores.
+</div>
+
+
+<!-- LOGIN -->
+
+<div id="loginForm">
+
+<div class="inputGroup">
+
+<label>Username</label>
+
+<input
+id="loginUser"
+placeholder="Enter username">
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>Password</label>
+
+<input
+id="loginPass"
+type="password"
+placeholder="Enter password">
+
+</div>
+
+
+<div id="loginMessage"
+class="message"></div>
+
+
+<button class="mainButton"
+onclick="login()">
+
+🔐 LOGIN
+
+</button>
+
+
+<div class="switch">
+
+Don't have an account?
+
+<span onclick="showRegister()">
+Register
+</span>
+
+</div>
+
+</div>
+
+
+<!-- REGISTER -->
+
+<div id="registerForm"
+class="hidden">
+
+<div class="inputGroup">
+
+<label>Username</label>
+
+<input
+id="regUser"
+placeholder="Choose username">
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>Password</label>
+
+<input
+id="regPass"
+type="password"
+placeholder="Choose password">
+
+</div>
+
+
+<div class="inputGroup">
+
+<label>Confirm password</label>
+
+<input
+id="regConfirm"
+type="password"
+placeholder="Confirm password">
+
+</div>
+
+
+<div id="regMessage"
+class="message"></div>
+
+
+<button class="mainButton"
+onclick="register()">
+
+📝 CREATE ACCOUNT
+
+</button>
+
+
+<div class="switch">
+
+Already registered?
+
+<span onclick="showLogin()">
+Login
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+DASHBOARD
+===================================================== -->
+
+<div id="dashboard" class="hidden">
+
+<div class="navbar">
+
+<div class="navLogo">
+✦ NEON GAME HUB
+</div>
+
+<div>
+
+👤 <span id="navUsername"></span>
+
+<button class="logout"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="dashboard">
+
+<div class="welcome">
+
+<h1>
+Welcome,
+<span id="welcomeName"></span>!
+</h1>
+
+<p>
+Choose a game and start playing.
+</p>
+
+</div>
+
+
+<div class="games">
+
+
+<!-- SHOOTER -->
+
+<div class="gameCard">
+
+<div>
+
+<div class="gameIcon">
+🔫
+</div>
+
+<h2>
+Neon Shooter
+</h2>
+
+<p>
+Fight increasingly powerful enemies with infinite ammo and one-shot bullets.
+</p>
+
+</div>
+
+<button class="play"
+onclick="openGame('shooter')">
+
+PLAY SHOOTER
+
+</button>
+
+</div>
+
+
+<!-- CUBE -->
+
+<div class="gameCard">
+
+<div>
+
+<div class="gameIcon">
+🟪
+</div>
+
+<h2>
+Neon Cube
+</h2>
+
+<p>
+Jump over spikes and survive the neon rhythm world.
+</p>
+
+</div>
+
+<button class="play"
+onclick="openGame('cube')">
+
+PLAY NEON CUBE
+
+</button>
+
+</div>
+
+
+<!-- FLA<script>
+/* =====================================================
+   ACCOUNTS
+   ===================================================== */
+function getUsers(){
+  return JSON.parse(localStorage.getItem("gameUsers") || "{}");
+}
+function saveUsers(users){
+  localStorage.setItem("gameUsers",JSON.stringify(users));
+}
+function showRegister(){ loginForm.classList.add("hidden"); registerForm.classList.remove("hidden"); }
+function showLogin(){ loginForm.classList.remove("hidden"); registerForm.classList.add("hidden"); }
+
+function register(){
+  const user=regUser.value.trim(), pass=regPass.value, confirm=regConfirm.value, users=getUsers();
+  if(user.length<3){regMessage.textContent="Username needs 3+ characters.";regMessage.className="message error";return;}
+  if(pass.length<4){regMessage.textContent="Password needs 4+ characters.";regMessage.className="message error";return;}
+  if(pass!==confirm){regMessage.textContent="Passwords do not match.";regMessage.className="message error";return;}
+  if(users[user]){regMessage.textContent="Username already exists.";regMessage.className="message error";return;}
+  users[user]={password:pass,scores:{shooter:0,cube:0,flappy:0,breakout:0}};
+  saveUsers(users); regMessage.textContent="Account created! Login now."; regMessage.className="message success";
+}
+function login(){
+  const user=loginUser.value.trim(), pass=loginPass.value, users=getUsers();
+  if(!users[user]){loginMessage.textContent="Username not found.";loginMessage.className="message error";return;}
+  if(users[user].password!==pass){loginMessage.textContent="Incorrect password.";loginMessage.className="message error";return;}
+  localStorage.setItem("currentUser",user); showDashboard(user);
+}
+function showDashboard(user){
+  authPage.classList.add("hidden"); gameArea.classList.add("hidden"); dashboard.classList.remove("hidden");
+  navUsername.textContent=user; welcomeName.textContent=user;
+}
+function logout(){
+  localStorage.removeItem("currentUser"); dashboard.classList.add("hidden"); gameArea.classList.add("hidden"); authPage.classList.remove("hidden");
+}
+const savedUser=localStorage.getItem("currentUser"); if(savedUser) showDashboard(savedUser);
+
+/* =====================================================
+   MODERN GAME ENGINE
+   ===================================================== */
+const canvas=document.getElementById("gameCanvas"), ctx=canvas.getContext("2d");
+let currentGame="", gameRunning=false, score=0, animation=0, lastTime=0;
+let mouseX=0,mouseY=0,mouseDown=false;
+const keys={};
+const touch={left:false,right:false,jump:false,action:false};
+
+function resizeCanvas(){
+  const dpr=Math.min(devicePixelRatio||1,2);
+  canvas.width=Math.floor(innerWidth*dpr); canvas.height=Math.floor(innerHeight*dpr);
+  canvas.style.width=innerWidth+"px"; canvas.style.height=innerHeight+"px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+resizeCanvas(); addEventListener("resize",resizeCanvas);
+
+function W(){return innerWidth} function H(){return innerHeight}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function rnd(a,b){return Math.random()*(b-a)+a}
+function hit(a,b){return a.x<a.w+b.x&&a.x+a.w>b.x&&a.y<a.h+b.y&&a.y+a.h>b.y}
+function circleRect(c,r){
+  const x=clamp(c.x,r.x,r.x+r.w), y=clamp(c.y,r.y,r.y+r.h);
+  return Math.hypot(c.x-x,c.y-y)<c.r;
+}
+function background(c1="#030712",c2="#102d55"){
+  const g=ctx.createLinearGradient(0,0,0,H());g.addColorStop(0,c1);g.addColorStop(1,c2);
+  ctx.fillStyle=g;ctx.fillRect(0,0,W(),H());
+  ctx.globalAlpha=.35;
+  for(let i=0;i<75;i++){const x=(i*137)%W(),y=(i*73)%H();ctx.fillStyle="#fff";ctx.fillRect(x,y,1.5,1.5)}
+  ctx.globalAlpha=1;
+}
+function text(t,x,y,size=16,align="left"){
+  ctx.font=`700 ${size}px Arial`;ctx.textAlign=align;ctx.fillStyle="#fff";ctx.fillText(t,x,y);
+}
+function openGame(game){
+  currentGame=game; dashboard.classList.add("hidden"); gameArea.classList.remove("hidden");
+  gameOver.classList.add("hidden"); gameUser.textContent=localStorage.getItem("currentUser");
+  score=0; gameScore.textContent="0"; cancelAnimationFrame(animation); lastTime=performance.now();
+  touchControls.classList.remove("hidden");
+  if(game==="shooter") startShooter();
+  if(game==="cube") startCube();
+  if(game==="flappy") startFlappy();
+  if(game==="breakout") startBreakout();
+}
+function backDashboard(){
+  gameRunning=false;cancelAnimationFrame(animation);gameArea.classList.add("hidden");
+  touchControls.classList.add("hidden");showDashboard(localStorage.getItem("currentUser"));
+}
+function restartGame(){gameOver.classList.add("hidden");openGame(currentGame)}
+function endGame(){
+  if(!gameRunning)return; gameRunning=false;
+  finalScore.textContent=Math.floor(score);gameOver.classList.remove("hidden");
+  const u=localStorage.getItem("currentUser"), users=getUsers();
+  if(u&&users[u]&&score>(users[u].scores[currentGame]||0)){users[u].scores[currentGame]=Math.floor(score);saveUsers(users)}
+}
+function dt(now){const d=Math.min((now-lastTime)/16.67,2);lastTime=now;return d}
+function controls(){
+  return keys.KeyA||keys.ArrowLeft||touch.left ? -1 : (keys.KeyD||keys.ArrowRight||touch.right ? 1:0);
+}
+
+/* keyboard + pointer + touch */
+onkeydown=e=>{keys[e.code]=true;if(["Space","ArrowLeft","ArrowRight","ArrowUp"].includes(e.code))e.preventDefault();
+  if(e.code==="Space"||e.code==="ArrowUp"){if(currentGame==="cube")cubeJump();if(currentGame==="flappy")flap();}
+};
+onkeyup=e=>keys[e.code]=false;
+canvas.onmousemove=e=>{mouseX=e.clientX;mouseY=e.clientY};
+canvas.onmousedown=()=>mouseDown=true; onmouseup=()=>mouseDown=false;
+canvas.ontouchstart=e=>{e.preventDefault();if(currentGame==="flappy")flap();else if(currentGame==="cube")cubeJump();else touch.action=true};
+canvas.ontouchend=e=>{e.preventDefault();touch.action=false};
+
+document.querySelectorAll("#touchControls button").forEach(btn=>{
+  const c=btn.dataset.control;
+  const on=ev=>{ev.preventDefault();touch[c]=true;if(c==="jump"){if(currentGame==="cube")cubeJump();if(currentGame==="flappy")flap()}};
+  const off=ev=>{ev.preventDefault();touch[c]=false};
+  btn.addEventListener("pointerdown",on);btn.addEventListener("pointerup",off);
+  btn.addEventListener("pointercancel",off);btn.addEventListener("pointerleave",off);
+});
+
+/* =====================================================
+   GAME 1 — NEON SHOOTER: waves, enemies, powerups, particles
+   ===================================================== */
+let shooterPlayer,shooterEnemies=[],shooterBullets=[],particles=[],powerups=[],spawnTimer=0,wave=1;
+function startShooter(){
+  currentGame="shooter";gameRunning=true;score=0;wave=1;spawnTimer=0;
+  shooterPlayer={x:W()/2-22,y:H()-150,w:44,h:58,vy:0,grounded:true,hp:3,cool:0};
+  shooterEnemies=[];shooterBullets=[];particles=[];powerups=[];
+  hudTitle.textContent="🔫 NEON SHOOTER";gameInfo.textContent="A/D or arrows • SPACE jump • Mouse/touch shoot";
+  shooterLoop(performance.now());
+}
+function burst(x,y,n=12,color="#00eaff"){
+  for(let i=0;i<n;i++)particles.push({x,y,vx:rnd(-4,4),vy:rnd(-4,4),life:rnd(15,35),color});
+}
+function startShot(){
+  const p=shooterPlayer, angle=Math.atan2(mouseY-(p.y+25),mouseX-(p.x+p.w/2));
+  shooterBullets.push({x:p.x+p.w/2,y:p.y+25,vx:Math.cos(angle)*18,vy:Math.sin(angle)*18,r:5});
+}
+function shooterLoop(now){
+  if(!gameRunning)return; const d=dt(now);background("#020612","#142c42");
+  ctx.fillStyle="#08121e";ctx.fillRect(0,H()-75,W(),75);
+  const dir=controls();shooterPlayer.x+=dir*7*d;shooterPlayer.x=clamp(shooterPlayer.x,0,W()-shooterPlayer.w);
+  shooterPlayer.vy+=.75*d;shooterPlayer.y+=shooterPlayer.vy*d;
+  if(shooterPlayer.y+shooterPlayer.h>=H()-75){shooterPlayer.y=H()-75-shooterPlayer.h;shooterPlayer.vy=0;shooterPlayer.grounded=true}else shooterPlayer.grounded=false;
+  if((keys.Space||touch.jump)&&shooterPlayer.grounded){shooterPlayer.vy=-15;shooterPlayer.grounded=false}
+  const angle=Math.atan2(mouseY-(shooterPlayer.y+25),mouseX-(shooterPlayer.x+22));
+  ctx.save();ctx.translate(shooterPlayer.x+22,shooterPlayer.y+25);ctx.rotate(angle);
+  ctx.fillStyle="#202638";ctx.fillRect(8,-5,52,10);ctx.restore();
+  ctx.fillStyle="#00cfff";ctx.fillRect(shooterPlayer.x,shooterPlayer.y,44,58);
+  ctx.fillStyle="#f0aa77";ctx.beginPath();ctx.arc(shooterPlayer.x+22,shooterPlayer.y-10,15,0,Math.PI*2);ctx.fill();
+  if((mouseDown||touch.action)&&shooterPlayer.cool<=0){startShot();shooterPlayer.cool=6}
+  shooterPlayer.cool-=d;
+  spawnTimer-=d;
+  if(spawnTimer<=0){const count=Math.min(1+Math.floor(wave/4),4);for(let i=0;i<count;i++)shooterEnemies.push({x:rnd(0,W()-42),y:H()-125,w:42,h:50,hp:1+Math.floor(wave/5),speed:rnd(1.2,2.4)+wave*.05});spawnTimer=Math.max(18,55-wave*2);if(score>0&&score%250<15)wave++}
+  for(let i=shooterBullets.length-1;i>=0;i--){let b=shooterBullets[i];b.x+=b.vx*d;b.y+=b.vy*d;ctx.fillStyle="#00ffff";ctx.shadowBlur=18;ctx.shadowColor="#00ffff";ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    if(b.x<-30||b.x>W()+30||b.y<-30||b.y>H()+30)shooterBullets.splice(i,1);
+  }
+  for(let i=shooterEnemies.length-1;i>=0;i--){let e=shooterEnemies[i];e.x+=(e.x<shooterPlayer.x?e.speed:-e.speed)*d;
+    ctx.fillStyle="#ff3155";ctx.shadowBlur=18;ctx.shadowColor="#ff3155";ctx.fillRect(e.x,e.y,e.w,e.h);ctx.shadowBlur=0;
+    for(let j=shooterBullets.length-1;j>=0;j--){let b=shooterBullets[j];if(b.x>e.x&&b.x<e.x+e.w&&b.y>e.y&&b.y<e.y+e.h){e.hp--;shooterBullets.splice(j,1);burst(b.x,b.y,8);if(e.hp<=0){score+=10;burst(e.x+20,e.y+20,20,"#ff3155");shooterEnemies.splice(i,1)}break}}
+    if(hit(shooterPlayer,e)){shooterEnemies.splice(i,1);shooterPlayer.hp--;burst(shooterPlayer.x,shooterPlayer.y,18,"#ff3155");if(shooterPlayer.hp<=0){endGame();return}}
+  }
+  for(let i=particles.length-1;i>=0;i--){let p=particles[i];p.x+=p.vx*d;p.y+=p.vy*d;p.life-=d;ctx.globalAlpha=Math.max(0,p.life/30);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,3,3);ctx.globalAlpha=1;if(p.life<=0)particles.splice(i,1)}
+  score+=.035*d;gameScore.textContent=Math.floor(score);gameExtra.textContent=`  ❤️ ${shooterPlayer.hp}  •  Wave ${wave}`;
+  animation=requestAnimationFrame(shooterLoop);
+}
+
+/* =====================================================
+   GAME 2 — NEON CUBE: procedural obstacles + double jump
+   ===================================================== */
+let cube,cubeObstacles=[],cubeDistance=0,cubeSpeed=7;
+function startCube(){
+  currentGame="cube";gameRunning=true;score=0;cubeDistance=0;cubeSpeed=7;
+  cube={x:W()*.18,y:H()-150,size:46,vy:0,grounded:false,jumps:0,rotation:0};
+  cubeObstacles=[];hudTitle.textContent="🟪 NEON CUBE";gameInfo.textContent="SPACE / tap = jump • A/D to move";
+  cubeLoop(performance.now());
+}
+function cubeJump(){if(gameRunning&&currentGame==="cube"&&cube.jumps<2){cube.vy=-15;cube.grounded=false;cube.jumps++}}
+function cubeLoop(now){
+  if(!gameRunning)return;const d=dt(now);background("#080516","#261050");const ground=H()-92;
+  ctx.fillStyle="#0b0618";ctx.fillRect(0,ground,W(),92);ctx.fillStyle="#ff00d9";ctx.fillRect(0,ground,W(),4);
+  if(cubeObstacles.length===0||cubeObstacles.at(-1).x<W()-240){
+    const h=rnd(45,120);cubeObstacles.push({x:W()+80,w:rnd(32,58),h});
+    if(Math.random()<.18)cubeObstacles.push({x:W()+220,w:35,h:rnd(35,80)});
+  }
+  for(const o of cubeObstacles){o.x-=cubeSpeed*d;ctx.fillStyle="#ff306f";ctx.beginPath();ctx.moveTo(o.x,ground);ctx.lineTo(o.x+o.w/2,ground-o.h);ctx.lineTo(o.x+o.w,ground);ctx.closePath();ctx.fill();
+    const r={x:o.x,y:ground-o.h,w:o.w,h:o.h};if(hit({x:cube.x,y:cube.y,w:cube.size,h:cube.size},r)){endGame();return}
+  }
+  cubeObstacles=cubeObstacles.filter(o=>o.x>-100);cube.vy+=.8*d;cube.y+=cube.vy*d;cube.x+=controls()*5*d;cube.x=clamp(cube.x,0,W()*.55);
+  if(cube.y+cube.size>=ground){cube.y=ground-cube.size;cube.vy=0;cube.grounded=true;cube.jumps=0}else cube.grounded=false;
+  cube.rotation+=.12*d;ctx.save();ctx.translate(cube.x+cube.size/2,cube.y+cube.size/2);ctx.rotate(cube.rotation);
+  ctx.fillStyle="#00eaff";ctx.shadowBlur=25;ctx.shadowColor="#00eaff";ctx.fillRect(-23,-23,46,46);ctx.shadowBlur=0;
+  ctx.fillStyle="#101a32";ctx.fillRect(-10,-9,7,7);ctx.fillRect(6,-9,7,7);ctx.restore();
+  cubeDistance+=cubeSpeed*d;score=Math.floor(cubeDistance/10);cubeSpeed+=.0015*d;
+  gameScore.textContent=score;animation=requestAnimationFrame(cubeLoop);
+}
+
+/* =====================================================
+   GAME 3 — SKY HOP: better physics, coins, combo score
+   ===================================================== */
+let bird,pipes=[],pipeTimer=0,coins=[],coinScore=0;
+function startFlappy(){
+  currentGame="flappy";gameRunning=true;score=0;pipeTimer=40;coinScore=0;
+  bird={x:W()*.2,y:H()/2,vy:0,r:21};pipes=[];coins=[];
+  hudTitle.textContent="🐦 SKY HOP";gameInfo.textContent="SPACE / tap = flap";
+  flappyLoop(performance.now());
+}
+function flap(){if(currentGame==="flappy"&&gameRunning){bird.vy=-9}}
+function flappyLoop(now){
+  if(!gameRunning)return;const d=dt(now);background("#081c38","#1288bd");
+  bird.vy+=.45*d;bird.y+=bird.vy*d;pipeTimer-=d;
+  if(pipeTimer<=0){const gap=rnd(155,205),top=rnd(75,Math.max(80,H()-gap-180));pipes.push({x:W()+30,gap,top,counted:false});if(Math.random()<.8)coins.push({x:W()+150,y:top+gap/2,r:9,taken:false});pipeTimer=95}
+  for(const p of pipes){p.x-=5*d;const bottom=p.top+p.gap;ctx.fillStyle="#26db75";ctx.fillRect(p.x,0,68,p.top);ctx.fillRect(p.x,bottom,68,H()-bottom);
+    if(bird.x+bird.r>p.x&&bird.x-bird.r<p.x+68&&(bird.y-bird.r<p.top||bird.y+bird.r>bottom)){endGame();return}
+    if(p.x+68<bird.x&&!p.counted){p.counted=true;score+=5}
+  }
+  for(const c of coins){c.x-=5*d;ctx.fillStyle="#ffd000";ctx.shadowBlur=15;ctx.shadowColor="#ffd000";ctx.beginPath();ctx.arc(c.x,c.y,c.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;if(!c.taken&&Math.hypot(bird.x-c.x,bird.y-c.y)<bird.r+c.r){c.taken=true;score+=10}}
+  pipes=pipes.filter(p=>p.x>-100);coins=coins.filter(c=>c.x>-30&&!c.taken);
+  if(bird.y<0||bird.y>H()){endGame();return}
+  ctx.fillStyle="#ffd93d";ctx.beginPath();ctx.arc(bird.x,bird.y,bird.r,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(bird.x+8,bird.y-7,7,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#111";ctx.beginPath();ctx.arc(bird.x+10,bird.y-7,3,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#ff7b00";ctx.fillRect(bird.x+20,bird.y,15,8);
+  score+=.012*d;gameScore.textContent=Math.floor(score);animation=requestAnimationFrame(flappyLoop);
+}
+
+/* =====================================================
+   GAME 4 — BLOCK BREAKER: powerups + levels + lives
+   ===================================================== */
+let paddle,ball,bricks=[],breakLives=3,breakLevel=1,breakPower=[];
+function startBreakout(){
+  currentGame="breakout";gameRunning=true;score=0;breakLives=3;breakLevel=1;breakPower=[];
+  paddle={x:W()/2-60,y:H()-60,w:120,h:15};ball={x:W()/2,y:H()-100,vx:5,vy:-5,r:9};buildBricks();
+  hudTitle.textContent="🧱 BLOCK BREAKER";gameInfo.textContent="Mouse / A-D / touch = paddle";
+  breakoutLoop(performance.now());
+}
+function buildBricks(){bricks=[];const cols=Math.max(5,Math.floor(W()/90)),rows=Math.min(7,4+breakLevel);
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)bricks.push({x:c*(W()/cols)+6,y:90+r*31,w:W()/cols-12,h:22,alive:true,hp:1+(r>rows-3?1:0)})
+}
+function breakoutLoop(now){
+  if(!gameRunning)return;const d=dt(now);background("#070412","#21104a");
+  paddle.x=(Math.abs(mouseX)>1?mouseX-paddle.w/2:paddle.x)+controls()*9*d;paddle.x=clamp(paddle.x,0,W()-paddle.w);
+  ctx.fillStyle="#00eaff";ctx.shadowBlur=20;ctx.shadowColor="#00eaff";ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);ctx.shadowBlur=0;
+  ball.x+=ball.vx*d;ball.y+=ball.vy*d;
+  if(ball.x<ball.r||ball.x>W()-ball.r)ball.vx*=-1;if(ball.y<ball.r)ball.vy*=-1;
+  if(ball.y+ball.r>paddle.y&&ball.y<paddle.y+paddle.h&&ball.x>paddle.x&&ball.x<paddle.x+paddle.w){
+    const hitPos=(ball.x-(paddle.x+paddle.w/2))/(paddle.w/2);ball.vx=hitPos*7;ball.vy=-Math.abs(ball.vy)
+  }
+  if(ball.y>H()){breakLives--;if(breakLives<=0){endGame();return}resetBall()}
+  let remaining=0;
+  for(const b of bricks){if(!b.alive)continue;remaining++;ctx.fillStyle=["#00eaff","#ff2bd6","#7c4dff","#00ff88","#ffd000"][Math.floor(b.y/31)%5];ctx.fillRect(b.x,b.y,b.w,b.h);
+    if(ball.x>b.x&&ball.x<b.x+b.w&&ball.y>b.y&&ball.y<b.y+b.h){b.hp--;ball.vy*=-1;if(b.hp<=0){b.alive=false;score+=10;if(Math.random()<.08)breakPower.push({x:b.x+b.w/2,y:b.y+10,type:Math.random()<.5?"wide":"life"})}}
+  }
+  for(const p of breakPower){p.y+=3*d;ctx.fillStyle=p.type==="wide"?"#00ff88":"#ffd000";ctx.fillRect(p.x-9,p.y-9,18,18);if(p.y>paddle.y&&p.x>paddle.x&&p.x<paddle.x+paddle.w){if(p.type==="wide")paddle.w=Math.min(180,paddle.w+35);else breakLives++;p.y=H()+100}}
+  breakPower=breakPower.filter(p=>p.y<H()+50);
+  if(remaining===0){breakLevel++;buildBricks();resetBall();break}
+  ctx.fillStyle="#fff";ctx.shadowBlur=20;ctx.shadowColor="#fff";ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+  gameScore.textContent=Math.floor(score);gameExtra.textContent=`  ❤️ ${breakLives}  •  Level ${breakLevel}`;
+  animation=requestAnimationFrame(breakoutLoop);
+}
+function resetBall(){ball.x=W()/2;ball.y=H()-100;ball.vx=(Math.random()<.5?-1:1)*(5+breakLevel*.25);ball.vy=-(5+breakLevel*.25)}
+
+/* Reset mobile touch states when leaving a game */
+document.addEventListener("visibilitychange",()=>{if(document.hidden){Object.keys(touch).forEach(k=>touch[k]=false);mouseDown=false}});
+</script>
+</body>
+</html>
