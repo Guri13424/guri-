@@ -17,6 +17,7 @@ body{
     background:#050713;
     color:white;
     overflow:hidden;
+    touch-action:none;
 }
 
 button{
@@ -24,6 +25,7 @@ button{
     cursor:pointer;
     color:white;
     font-weight:bold;
+    -webkit-tap-highlight-color:transparent;
 }
 
 .hidden{
@@ -280,6 +282,8 @@ GAME AREA
     width:100%;
     height:100%;
     display:block;
+
+    touch-action:none;
 }
 
 #gameHUD{
@@ -298,6 +302,8 @@ GAME AREA
     line-height:1.6;
 
     z-index:10;
+
+    pointer-events:none;
 }
 
 .hudTitle{
@@ -325,8 +331,10 @@ GAME AREA
 
 #gameInfo{
     position:absolute;
+
     bottom:15px;
     left:50%;
+
     transform:translateX(-50%);
 
     padding:8px 15px;
@@ -340,6 +348,8 @@ GAME AREA
     font-size:13px;
 
     z-index:10;
+
+    pointer-events:none;
 }
 
 #gameOver{
@@ -381,61 +391,162 @@ GAME AREA
 }
 
 /* =====================================================
-RESPONSIVE
+MOBILE CONTROLS
 ===================================================== */
 
-@media(max-width:600px){
+#mobileControls{
+    position:absolute;
 
-    .welcome h1{
-        font-size:32px;
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:155px;
+
+    z-index:25;
+
+    pointer-events:none;
+}
+
+.touchBtn{
+    position:absolute;
+
+    width:65px;
+    height:65px;
+
+    border-radius:50%;
+
+    background:#07152ddd;
+
+    border:2px solid #00eaff;
+
+    box-shadow:
+        0 0 18px #00eaff55;
+
+    font-size:25px;
+
+    pointer-events:auto;
+
+    touch-action:none;
+
+    user-select:none;
+
+    -webkit-user-select:none;
+}
+
+.touchBtn:active{
+    transform:scale(.92);
+
+    background:#00aaccaa;
+}
+
+#touchLeft{
+    left:20px;
+    bottom:25px;
+}
+
+#touchRight{
+    left:95px;
+    bottom:25px;
+}
+
+#touchJump{
+    right:95px;
+    bottom:25px;
+}
+
+#touchAction{
+    right:20px;
+    bottom:25px;
+}
+
+#touchHint{
+    position:absolute;
+
+    left:50%;
+    bottom:5px;
+
+    transform:translateX(-50%);
+
+    color:#9ca9cd;
+
+    font-size:11px;
+
+    white-space:nowrap;
+}
+
+@media(min-width:701px){
+
+    #mobileControls{
+        display:none!important;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .navbar{
+        padding:0 12px;
+    }
+
+    .navLogo{
+        font-size:16px;
+    }
+
+    .logout{
+        padding:7px 10px;
+        font-size:12px;
     }
 
     .dashboard{
-        padding:30px 15px;
+        padding:25px 12px;
     }
 
-}
+    .welcome h1{
+        font-size:30px;
+    }
 
-/* =====================================================
-   MOBILE / PC GAME UPGRADE
-   ===================================================== */
-#gameArea{touch-action:none}
-#gameCanvas{touch-action:none}
-#gameHUD{user-select:none}
-#gameInfo{max-width:calc(100vw - 30px);text-align:center}
-#touchControls{
-  position:absolute;
-  left:0; right:0; bottom:18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0 18px;
-  z-index:25;
-  pointer-events:none;
-}
-#touchControls button{
-  width:62px;height:62px;border-radius:50%;
-  background:#08152ee8;
-  border:1px solid #00dfff;
-  box-shadow:0 0 20px #00cfff44;
-  font-size:24px;
-  pointer-events:auto;
-  -webkit-tap-highlight-color:transparent;
-  touch-action:none;
-}
-#touchControls button[data-control="jump"]{
-  width:74px;height:74px;
-}
-@media(min-width:801px){
-  #touchControls{display:none!important}
-}
-@media(max-width:600px){
-  #gameHUD{top:8px;left:8px;padding:9px 11px;font-size:12px}
-  .hudTitle{font-size:15px}
-  .back{top:8px;right:8px;padding:8px 11px;font-size:12px}
-  #gameInfo{bottom:92px;font-size:11px}
-  #gameOver{width:min(88vw,360px);padding:28px 20px}
-  #gameOver h1{font-size:32px}
+    .gameCard{
+        min-height:210px;
+        padding:20px;
+    }
+
+    .gameIcon{
+        font-size:45px;
+    }
+
+    #gameHUD{
+        top:8px;
+        left:8px;
+        padding:9px 11px;
+        font-size:12px;
+    }
+
+    .hudTitle{
+        font-size:15px;
+    }
+
+    .back{
+        top:8px;
+        right:8px;
+        padding:8px 11px;
+        font-size:12px;
+    }
+
+    #gameInfo{
+        bottom:160px;
+        font-size:11px;
+    }
+
+    #gameOver{
+        width:85%;
+        padding:25px;
+    }
+
+    #gameOver h1{
+        font-size:32px;
+    }
+
 }
 </style>
 </head>
@@ -579,11 +690,9 @@ Login
 </div>
 
 </div>
-
-
-<!-- =====================================================
+/* =====================================================
 DASHBOARD
-===================================================== -->
+===================================================== */
 
 <div id="dashboard" class="hidden">
 
@@ -614,8 +723,10 @@ Logout
 <div class="welcome">
 
 <h1>
+
 Welcome,
 <span id="welcomeName"></span>!
+
 </h1>
 
 <p>
@@ -688,266 +799,1022 @@ PLAY NEON CUBE
 </div>
 
 
-<!-- FLA<script>
+<!-- FLAPPY -->
+
+<div class="gameCard">
+
+<div>
+
+<div class="gameIcon">
+🐦
+</div>
+
+<h2>
+Sky Hop
+</h2>
+
+<p>
+Fly through the gaps and get the highest score.
+</p>
+
+</div>
+
+<button class="play"
+onclick="openGame('flappy')">
+
+PLAY SKY HOP
+
+</button>
+
+</div>
+
+
+<!-- BREAKOUT -->
+
+<div class="gameCard">
+
+<div>
+
+<div class="gameIcon">
+🧱
+</div>
+
+<h2>
+Block Breaker
+</h2>
+
+<p>
+Destroy all the blocks and keep the ball alive.
+</p>
+
+</div>
+
+<button class="play"
+onclick="openGame('breakout')">
+
+PLAY BREAKER
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+GAME AREA
+===================================================== -->
+
+<div id="gameArea" class="hidden">
+
+<canvas id="gameCanvas"></canvas>
+
+
+<div id="gameHUD">
+
+<div class="hudTitle"
+id="hudTitle">
+
+NEON GAME
+
+</div>
+
+👤 <span id="gameUser"></span><br>
+
+🏆 Score:
+<span id="gameScore">0</span>
+
+</div>
+
+
+<button class="back"
+onclick="backDashboard()">
+
+← Dashboard
+
+</button>
+
+
+<div id="gameInfo">
+Controls
+</div>
+
+
+<div id="mobileControls">
+
+<button id="touchLeft"
+class="touchBtn">
+
+◀
+
+</button>
+
+<button id="touchRight"
+class="touchBtn">
+
+▶
+
+</button>
+
+<button id="touchJump"
+class="touchBtn">
+
+⬆
+
+</button>
+
+<button id="touchAction"
+class="touchBtn">
+
+●
+
+</button>
+
+<div id="touchHint">
+Touch controls enabled
+</div>
+
+</div>
+
+
+<div id="gameOver"
+class="hidden">
+
+<h1>
+GAME OVER
+</h1>
+
+<p>
+Score:
+<span id="finalScore">0</span>
+</p>
+
+<button onclick="restartGame()">
+
+🔄 PLAY AGAIN
+
+</button>
+
+</div>
+
+</div>
+<script>
+
 /* =====================================================
-   ACCOUNTS
-   ===================================================== */
+ACCOUNTS
+===================================================== */
+
 function getUsers(){
-  return JSON.parse(localStorage.getItem("gameUsers") || "{}");
+
+    return JSON.parse(
+        localStorage.getItem("gameUsers") || "{}"
+    );
+
 }
+
+
 function saveUsers(users){
-  localStorage.setItem("gameUsers",JSON.stringify(users));
+
+    localStorage.setItem(
+        "gameUsers",
+        JSON.stringify(users)
+    );
+
 }
-function showRegister(){ loginForm.classList.add("hidden"); registerForm.classList.remove("hidden"); }
-function showLogin(){ loginForm.classList.remove("hidden"); registerForm.classList.add("hidden"); }
+
+
+function showRegister(){
+
+    loginForm.classList.add("hidden");
+
+    registerForm.classList.remove("hidden");
+
+}
+
+
+function showLogin(){
+
+    loginForm.classList.remove("hidden");
+
+    registerForm.classList.add("hidden");
+
+}
+
 
 function register(){
-  const user=regUser.value.trim(), pass=regPass.value, confirm=regConfirm.value, users=getUsers();
-  if(user.length<3){regMessage.textContent="Username needs 3+ characters.";regMessage.className="message error";return;}
-  if(pass.length<4){regMessage.textContent="Password needs 4+ characters.";regMessage.className="message error";return;}
-  if(pass!==confirm){regMessage.textContent="Passwords do not match.";regMessage.className="message error";return;}
-  if(users[user]){regMessage.textContent="Username already exists.";regMessage.className="message error";return;}
-  users[user]={password:pass,scores:{shooter:0,cube:0,flappy:0,breakout:0}};
-  saveUsers(users); regMessage.textContent="Account created! Login now."; regMessage.className="message success";
+
+    const user=regUser.value.trim();
+
+    const pass=regPass.value;
+
+    const confirm=regConfirm.value;
+
+    const users=getUsers();
+
+
+    if(user.length<3){
+
+        regMessage.textContent=
+        "Username needs 3+ characters.";
+
+        regMessage.className=
+        "message error";
+
+        return;
+
+    }
+
+
+    if(pass.length<4){
+
+        regMessage.textContent=
+        "Password needs 4+ characters.";
+
+        regMessage.className=
+        "message error";
+
+        return;
+
+    }
+
+
+    if(pass!==confirm){
+
+        regMessage.textContent=
+        "Passwords do not match.";
+
+        regMessage.className=
+        "message error";
+
+        return;
+
+    }
+
+
+    if(users[user]){
+
+        regMessage.textContent=
+        "Username already exists.";
+
+        regMessage.className=
+        "message error";
+
+        return;
+
+    }
+
+
+    users[user]={
+
+        password:pass,
+
+        scores:{
+
+            shooter:0,
+
+            cube:0,
+
+            flappy:0,
+
+            breakout:0
+
+        }
+
+    };
+
+
+    saveUsers(users);
+
+
+    regMessage.textContent=
+    "Account created! Login now.";
+
+    regMessage.className=
+    "message success";
+
 }
+
+
 function login(){
-  const user=loginUser.value.trim(), pass=loginPass.value, users=getUsers();
-  if(!users[user]){loginMessage.textContent="Username not found.";loginMessage.className="message error";return;}
-  if(users[user].password!==pass){loginMessage.textContent="Incorrect password.";loginMessage.className="message error";return;}
-  localStorage.setItem("currentUser",user); showDashboard(user);
+
+    const user=loginUser.value.trim();
+
+    const pass=loginPass.value;
+
+    const users=getUsers();
+
+
+    if(!users[user]){
+
+        loginMessage.textContent=
+        "Username not found.";
+
+        loginMessage.className=
+        "message error";
+
+        return;
+
+    }
+
+
+    if(users[user].password!==pass){
+
+        loginMessage.textContent=
+        "Incorrect password.";
+
+        loginMessage.className=
+        "message error";
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "currentUser",
+        user
+    );
+
+
+    showDashboard(user);
+
 }
+
+
 function showDashboard(user){
-  authPage.classList.add("hidden"); gameArea.classList.add("hidden"); dashboard.classList.remove("hidden");
-  navUsername.textContent=user; welcomeName.textContent=user;
+
+    authPage.classList.add("hidden");
+
+    gameArea.classList.add("hidden");
+
+    dashboard.classList.remove("hidden");
+
+
+    navUsername.textContent=user;
+
+    welcomeName.textContent=user;
+
 }
+
+
 function logout(){
-  localStorage.removeItem("currentUser"); dashboard.classList.add("hidden"); gameArea.classList.add("hidden"); authPage.classList.remove("hidden");
+
+    localStorage.removeItem("currentUser");
+
+    dashboard.classList.add("hidden");
+
+    gameArea.classList.add("hidden");
+
+    authPage.classList.remove("hidden");
+
 }
-const savedUser=localStorage.getItem("currentUser"); if(savedUser) showDashboard(savedUser);
+
+
+const savedUser=
+localStorage.getItem("currentUser");
+
+
+if(savedUser){
+
+    showDashboard(savedUser);
+
+}
+
 
 /* =====================================================
-   MODERN GAME ENGINE
-   ===================================================== */
-const canvas=document.getElementById("gameCanvas"), ctx=canvas.getContext("2d");
-let currentGame="", gameRunning=false, score=0, animation=0, lastTime=0;
-let mouseX=0,mouseY=0,mouseDown=false;
-const keys={};
-const touch={left:false,right:false,jump:false,action:false};
+GAME ENGINE
+===================================================== */
+
+const canvas=
+document.getElementById("gameCanvas");
+
+const ctx=
+canvas.getContext("2d");
+
+
+let currentGame="";
+
+let gameRunning=false;
+
+let score=0;
+
+let animation;
+
 
 function resizeCanvas(){
-  const dpr=Math.min(devicePixelRatio||1,2);
-  canvas.width=Math.floor(innerWidth*dpr); canvas.height=Math.floor(innerHeight*dpr);
-  canvas.style.width=innerWidth+"px"; canvas.style.height=innerHeight+"px";
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-}
-resizeCanvas(); addEventListener("resize",resizeCanvas);
 
-function W(){return innerWidth} function H(){return innerHeight}
-function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-function rnd(a,b){return Math.random()*(b-a)+a}
-function hit(a,b){return a.x<a.w+b.x&&a.x+a.w>b.x&&a.y<a.h+b.y&&a.y+a.h>b.y}
-function circleRect(c,r){
-  const x=clamp(c.x,r.x,r.x+r.w), y=clamp(c.y,r.y,r.y+r.h);
-  return Math.hypot(c.x-x,c.y-y)<c.r;
+    canvas.width=innerWidth;
+
+    canvas.height=innerHeight;
+
 }
-function background(c1="#030712",c2="#102d55"){
-  const g=ctx.createLinearGradient(0,0,0,H());g.addColorStop(0,c1);g.addColorStop(1,c2);
-  ctx.fillStyle=g;ctx.fillRect(0,0,W(),H());
-  ctx.globalAlpha=.35;
-  for(let i=0;i<75;i++){const x=(i*137)%W(),y=(i*73)%H();ctx.fillStyle="#fff";ctx.fillRect(x,y,1.5,1.5)}
-  ctx.globalAlpha=1;
-}
-function text(t,x,y,size=16,align="left"){
-  ctx.font=`700 ${size}px Arial`;ctx.textAlign=align;ctx.fillStyle="#fff";ctx.fillText(t,x,y);
-}
+
+
+resizeCanvas();
+
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+
+/* =====================================================
+OPEN GAME
+===================================================== */
+
 function openGame(game){
-  currentGame=game; dashboard.classList.add("hidden"); gameArea.classList.remove("hidden");
-  gameOver.classList.add("hidden"); gameUser.textContent=localStorage.getItem("currentUser");
-  score=0; gameScore.textContent="0"; cancelAnimationFrame(animation); lastTime=performance.now();
-  touchControls.classList.remove("hidden");
-  if(game==="shooter") startShooter();
-  if(game==="cube") startCube();
-  if(game==="flappy") startFlappy();
-  if(game==="breakout") startBreakout();
+
+    currentGame=game;
+
+    touchActive=false;
+
+    mouseDown=false;
+
+
+    dashboard.classList.add("hidden");
+
+    gameArea.classList.remove("hidden");
+
+    gameOver.classList.add("hidden");
+
+
+    gameUser.textContent=
+    localStorage.getItem("currentUser");
+
+
+    score=0;
+
+    gameScore.textContent=0;
+
+
+    if(animation)
+        cancelAnimationFrame(animation);
+
+
+    if(game==="shooter")
+        startShooter();
+
+
+    if(game==="cube")
+        startCube();
+
+
+    if(game==="flappy")
+        startFlappy();
+
+
+    if(game==="breakout")
+        startBreakout();
+
+
+    updateMobileControls();
+
 }
+
+
 function backDashboard(){
-  gameRunning=false;cancelAnimationFrame(animation);gameArea.classList.add("hidden");
-  touchControls.classList.add("hidden");showDashboard(localStorage.getItem("currentUser"));
+
+    gameRunning=false;
+
+    mobileControls.style.display="none";
+
+    mouseDown=false;
+
+
+    if(animation)
+        cancelAnimationFrame(animation);
+
+
+    gameArea.classList.add("hidden");
+
+
+    showDashboard(
+        localStorage.getItem("currentUser")
+    );
+
 }
-function restartGame(){gameOver.classList.add("hidden");openGame(currentGame)}
+
+
+function restartGame(){
+
+    gameOver.classList.add("hidden");
+
+    openGame(currentGame);
+
+}
+
+
 function endGame(){
-  if(!gameRunning)return; gameRunning=false;
-  finalScore.textContent=Math.floor(score);gameOver.classList.remove("hidden");
-  const u=localStorage.getItem("currentUser"), users=getUsers();
-  if(u&&users[u]&&score>(users[u].scores[currentGame]||0)){users[u].scores[currentGame]=Math.floor(score);saveUsers(users)}
-}
-function dt(now){const d=Math.min((now-lastTime)/16.67,2);lastTime=now;return d}
-function controls(){
-  return keys.KeyA||keys.ArrowLeft||touch.left ? -1 : (keys.KeyD||keys.ArrowRight||touch.right ? 1:0);
+
+    gameRunning=false;
+
+    mobileControls.style.display="none";
+
+    mouseDown=false;
+
+    finalScore.textContent=score;
+
+    gameOver.classList.remove("hidden");
+
 }
 
-/* keyboard + pointer + touch */
-onkeydown=e=>{keys[e.code]=true;if(["Space","ArrowLeft","ArrowRight","ArrowUp"].includes(e.code))e.preventDefault();
-  if(e.code==="Space"||e.code==="ArrowUp"){if(currentGame==="cube")cubeJump();if(currentGame==="flappy")flap();}
+
+/* =====================================================
+SHARED INPUT
+===================================================== */
+
+const keys={};
+
+let mouseX=0;
+
+let mouseY=0;
+
+let mouseDown=false;
+
+let touchActive=false;
+
+
+const mobileControls=
+document.getElementById("mobileControls");
+
+const touchLeft=
+document.getElementById("touchLeft");
+
+const touchRight=
+document.getElementById("touchRight");
+
+const touchJump=
+document.getElementById("touchJump");
+
+const touchAction=
+document.getElementById("touchAction");
+
+
+function setKey(code,value){
+
+    keys[code]=value;
+
+}
+
+
+function bindHold(button,code){
+
+    button.addEventListener(
+        "pointerdown",
+        e=>{
+
+            e.preventDefault();
+
+            button.setPointerCapture?.(
+                e.pointerId
+            );
+
+            setKey(code,true);
+
+        }
+    );
+
+
+    const release=()=>
+        setKey(code,false);
+
+
+    button.addEventListener(
+        "pointerup",
+        release
+    );
+
+    button.addEventListener(
+        "pointercancel",
+        release
+    );
+
+    button.addEventListener(
+        "lostpointercapture",
+        release
+    );
+
+}
+
+
+bindHold(
+    touchLeft,
+    "ArrowLeft"
+);
+
+
+bindHold(
+    touchRight,
+    "ArrowRight"
+);
+
+
+touchJump.addEventListener(
+    "pointerdown",
+    e=>{
+
+        e.preventDefault();
+
+
+        if(currentGame==="cube")
+            cubeJump();
+
+
+        if(currentGame==="flappy")
+            flap();
+
+
+        if(currentGame==="shooter")
+            setKey("Space",true);
+
+    }
+);
+
+
+touchJump.addEventListener(
+    "pointerup",
+    ()=>{
+
+        setKey(
+            "Space",
+            false
+        );
+
+    }
+);
+
+
+touchJump.addEventListener(
+    "pointercancel",
+    ()=>{
+
+        setKey(
+            "Space",
+            false
+        );
+
+    }
+);
+
+
+touchAction.addEventListener(
+    "pointerdown",
+    e=>{
+
+        e.preventDefault();
+
+
+        if(currentGame==="shooter")
+            mouseDown=true;
+
+
+        if(currentGame==="cube")
+            cubeJump();
+
+
+        if(currentGame==="flappy")
+            flap();
+
+    }
+);
+
+
+const releaseAction=()=>{
+
+    mouseDown=false;
+
 };
-onkeyup=e=>keys[e.code]=false;
-canvas.onmousemove=e=>{mouseX=e.clientX;mouseY=e.clientY};
-canvas.onmousedown=()=>mouseDown=true; onmouseup=()=>mouseDown=false;
-canvas.ontouchstart=e=>{e.preventDefault();if(currentGame==="flappy")flap();else if(currentGame==="cube")cubeJump();else touch.action=true};
-canvas.ontouchend=e=>{e.preventDefault();touch.action=false};
 
-document.querySelectorAll("#touchControls button").forEach(btn=>{
-  const c=btn.dataset.control;
-  const on=ev=>{ev.preventDefault();touch[c]=true;if(c==="jump"){if(currentGame==="cube")cubeJump();if(currentGame==="flappy")flap()}};
-  const off=ev=>{ev.preventDefault();touch[c]=false};
-  btn.addEventListener("pointerdown",on);btn.addEventListener("pointerup",off);
-  btn.addEventListener("pointercancel",off);btn.addEventListener("pointerleave",off);
-});
 
-/* =====================================================
-   GAME 1 — NEON SHOOTER: waves, enemies, powerups, particles
-   ===================================================== */
-let shooterPlayer,shooterEnemies=[],shooterBullets=[],particles=[],powerups=[],spawnTimer=0,wave=1;
-function startShooter(){
-  currentGame="shooter";gameRunning=true;score=0;wave=1;spawnTimer=0;
-  shooterPlayer={x:W()/2-22,y:H()-150,w:44,h:58,vy:0,grounded:true,hp:3,cool:0};
-  shooterEnemies=[];shooterBullets=[];particles=[];powerups=[];
-  hudTitle.textContent="🔫 NEON SHOOTER";gameInfo.textContent="A/D or arrows • SPACE jump • Mouse/touch shoot";
-  shooterLoop(performance.now());
-}
-function burst(x,y,n=12,color="#00eaff"){
-  for(let i=0;i<n;i++)particles.push({x,y,vx:rnd(-4,4),vy:rnd(-4,4),life:rnd(15,35),color});
-}
-function startShot(){
-  const p=shooterPlayer, angle=Math.atan2(mouseY-(p.y+25),mouseX-(p.x+p.w/2));
-  shooterBullets.push({x:p.x+p.w/2,y:p.y+25,vx:Math.cos(angle)*18,vy:Math.sin(angle)*18,r:5});
-}
-function shooterLoop(now){
-  if(!gameRunning)return; const d=dt(now);background("#020612","#142c42");
-  ctx.fillStyle="#08121e";ctx.fillRect(0,H()-75,W(),75);
-  const dir=controls();shooterPlayer.x+=dir*7*d;shooterPlayer.x=clamp(shooterPlayer.x,0,W()-shooterPlayer.w);
-  shooterPlayer.vy+=.75*d;shooterPlayer.y+=shooterPlayer.vy*d;
-  if(shooterPlayer.y+shooterPlayer.h>=H()-75){shooterPlayer.y=H()-75-shooterPlayer.h;shooterPlayer.vy=0;shooterPlayer.grounded=true}else shooterPlayer.grounded=false;
-  if((keys.Space||touch.jump)&&shooterPlayer.grounded){shooterPlayer.vy=-15;shooterPlayer.grounded=false}
-  const angle=Math.atan2(mouseY-(shooterPlayer.y+25),mouseX-(shooterPlayer.x+22));
-  ctx.save();ctx.translate(shooterPlayer.x+22,shooterPlayer.y+25);ctx.rotate(angle);
-  ctx.fillStyle="#202638";ctx.fillRect(8,-5,52,10);ctx.restore();
-  ctx.fillStyle="#00cfff";ctx.fillRect(shooterPlayer.x,shooterPlayer.y,44,58);
-  ctx.fillStyle="#f0aa77";ctx.beginPath();ctx.arc(shooterPlayer.x+22,shooterPlayer.y-10,15,0,Math.PI*2);ctx.fill();
-  if((mouseDown||touch.action)&&shooterPlayer.cool<=0){startShot();shooterPlayer.cool=6}
-  shooterPlayer.cool-=d;
-  spawnTimer-=d;
-  if(spawnTimer<=0){const count=Math.min(1+Math.floor(wave/4),4);for(let i=0;i<count;i++)shooterEnemies.push({x:rnd(0,W()-42),y:H()-125,w:42,h:50,hp:1+Math.floor(wave/5),speed:rnd(1.2,2.4)+wave*.05});spawnTimer=Math.max(18,55-wave*2);if(score>0&&score%250<15)wave++}
-  for(let i=shooterBullets.length-1;i>=0;i--){let b=shooterBullets[i];b.x+=b.vx*d;b.y+=b.vy*d;ctx.fillStyle="#00ffff";ctx.shadowBlur=18;ctx.shadowColor="#00ffff";ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-    if(b.x<-30||b.x>W()+30||b.y<-30||b.y>H()+30)shooterBullets.splice(i,1);
-  }
-  for(let i=shooterEnemies.length-1;i>=0;i--){let e=shooterEnemies[i];e.x+=(e.x<shooterPlayer.x?e.speed:-e.speed)*d;
-    ctx.fillStyle="#ff3155";ctx.shadowBlur=18;ctx.shadowColor="#ff3155";ctx.fillRect(e.x,e.y,e.w,e.h);ctx.shadowBlur=0;
-    for(let j=shooterBullets.length-1;j>=0;j--){let b=shooterBullets[j];if(b.x>e.x&&b.x<e.x+e.w&&b.y>e.y&&b.y<e.y+e.h){e.hp--;shooterBullets.splice(j,1);burst(b.x,b.y,8);if(e.hp<=0){score+=10;burst(e.x+20,e.y+20,20,"#ff3155");shooterEnemies.splice(i,1)}break}}
-    if(hit(shooterPlayer,e)){shooterEnemies.splice(i,1);shooterPlayer.hp--;burst(shooterPlayer.x,shooterPlayer.y,18,"#ff3155");if(shooterPlayer.hp<=0){endGame();return}}
-  }
-  for(let i=particles.length-1;i>=0;i--){let p=particles[i];p.x+=p.vx*d;p.y+=p.vy*d;p.life-=d;ctx.globalAlpha=Math.max(0,p.life/30);ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,3,3);ctx.globalAlpha=1;if(p.life<=0)particles.splice(i,1)}
-  score+=.035*d;gameScore.textContent=Math.floor(score);gameExtra.textContent=`  ❤️ ${shooterPlayer.hp}  •  Wave ${wave}`;
-  animation=requestAnimationFrame(shooterLoop);
+touchAction.addEventListener(
+    "pointerup",
+    releaseAction
+);
+
+
+touchAction.addEventListener(
+    "pointercancel",
+    releaseAction
+);
+
+
+function updateMobileControls(){
+
+    const phone=
+        window.matchMedia(
+            "(max-width:700px)"
+        ).matches;
+
+
+    mobileControls.style.display=
+        phone && gameRunning
+        ? "block"
+        : "none";
+
+
+    if(currentGame==="shooter"){
+
+        touchJump.textContent="⬆";
+
+        touchAction.textContent="🔫";
+
+        touchHint.textContent=
+            "◀ ▶ move • ⬆ jump • 🔫 shoot • drag to aim";
+
+    }
+
+
+    else if(currentGame==="cube"){
+
+        touchJump.textContent="⬆";
+
+        touchAction.textContent="⬆";
+
+        touchHint.textContent=
+            "Tap ⬆ or the screen to jump";
+
+    }
+
+
+    else if(currentGame==="flappy"){
+
+        touchJump.textContent="🐦";
+
+        touchAction.textContent="🐦";
+
+        touchHint.textContent=
+            "Tap the screen or 🐦 to flap";
+
+    }
+
+
+    else if(currentGame==="breakout"){
+
+        touchJump.textContent="◀";
+
+        touchAction.textContent="▶";
+
+        touchHint.textContent=
+            "Drag anywhere to move the paddle";
+
+    }
+
 }
 
-/* =====================================================
-   GAME 2 — NEON CUBE: procedural obstacles + double jump
-   ===================================================== */
-let cube,cubeObstacles=[],cubeDistance=0,cubeSpeed=7;
-function startCube(){
-  currentGame="cube";gameRunning=true;score=0;cubeDistance=0;cubeSpeed=7;
-  cube={x:W()*.18,y:H()-150,size:46,vy:0,grounded:false,jumps:0,rotation:0};
-  cubeObstacles=[];hudTitle.textContent="🟪 NEON CUBE";gameInfo.textContent="SPACE / tap = jump • A/D to move";
-  cubeLoop(performance.now());
-}
-function cubeJump(){if(gameRunning&&currentGame==="cube"&&cube.jumps<2){cube.vy=-15;cube.grounded=false;cube.jumps++}}
-function cubeLoop(now){
-  if(!gameRunning)return;const d=dt(now);background("#080516","#261050");const ground=H()-92;
-  ctx.fillStyle="#0b0618";ctx.fillRect(0,ground,W(),92);ctx.fillStyle="#ff00d9";ctx.fillRect(0,ground,W(),4);
-  if(cubeObstacles.length===0||cubeObstacles.at(-1).x<W()-240){
-    const h=rnd(45,120);cubeObstacles.push({x:W()+80,w:rnd(32,58),h});
-    if(Math.random()<.18)cubeObstacles.push({x:W()+220,w:35,h:rnd(35,80)});
-  }
-  for(const o of cubeObstacles){o.x-=cubeSpeed*d;ctx.fillStyle="#ff306f";ctx.beginPath();ctx.moveTo(o.x,ground);ctx.lineTo(o.x+o.w/2,ground-o.h);ctx.lineTo(o.x+o.w,ground);ctx.closePath();ctx.fill();
-    const r={x:o.x,y:ground-o.h,w:o.w,h:o.h};if(hit({x:cube.x,y:cube.y,w:cube.size,h:cube.size},r)){endGame();return}
-  }
-  cubeObstacles=cubeObstacles.filter(o=>o.x>-100);cube.vy+=.8*d;cube.y+=cube.vy*d;cube.x+=controls()*5*d;cube.x=clamp(cube.x,0,W()*.55);
-  if(cube.y+cube.size>=ground){cube.y=ground-cube.size;cube.vy=0;cube.grounded=true;cube.jumps=0}else cube.grounded=false;
-  cube.rotation+=.12*d;ctx.save();ctx.translate(cube.x+cube.size/2,cube.y+cube.size/2);ctx.rotate(cube.rotation);
-  ctx.fillStyle="#00eaff";ctx.shadowBlur=25;ctx.shadowColor="#00eaff";ctx.fillRect(-23,-23,46,46);ctx.shadowBlur=0;
-  ctx.fillStyle="#101a32";ctx.fillRect(-10,-9,7,7);ctx.fillRect(6,-9,7,7);ctx.restore();
-  cubeDistance+=cubeSpeed*d;score=Math.floor(cubeDistance/10);cubeSpeed+=.0015*d;
-  gameScore.textContent=score;animation=requestAnimationFrame(cubeLoop);
-}
 
 /* =====================================================
-   GAME 3 — SKY HOP: better physics, coins, combo score
-   ===================================================== */
-let bird,pipes=[],pipeTimer=0,coins=[],coinScore=0;
-function startFlappy(){
-  currentGame="flappy";gameRunning=true;score=0;pipeTimer=40;coinScore=0;
-  bird={x:W()*.2,y:H()/2,vy:0,r:21};pipes=[];coins=[];
-  hudTitle.textContent="🐦 SKY HOP";gameInfo.textContent="SPACE / tap = flap";
-  flappyLoop(performance.now());
-}
-function flap(){if(currentGame==="flappy"&&gameRunning){bird.vy=-9}}
-function flappyLoop(now){
-  if(!gameRunning)return;const d=dt(now);background("#081c38","#1288bd");
-  bird.vy+=.45*d;bird.y+=bird.vy*d;pipeTimer-=d;
-  if(pipeTimer<=0){const gap=rnd(155,205),top=rnd(75,Math.max(80,H()-gap-180));pipes.push({x:W()+30,gap,top,counted:false});if(Math.random()<.8)coins.push({x:W()+150,y:top+gap/2,r:9,taken:false});pipeTimer=95}
-  for(const p of pipes){p.x-=5*d;const bottom=p.top+p.gap;ctx.fillStyle="#26db75";ctx.fillRect(p.x,0,68,p.top);ctx.fillRect(p.x,bottom,68,H()-bottom);
-    if(bird.x+bird.r>p.x&&bird.x-bird.r<p.x+68&&(bird.y-bird.r<p.top||bird.y+bird.r>bottom)){endGame();return}
-    if(p.x+68<bird.x&&!p.counted){p.counted=true;score+=5}
-  }
-  for(const c of coins){c.x-=5*d;ctx.fillStyle="#ffd000";ctx.shadowBlur=15;ctx.shadowColor="#ffd000";ctx.beginPath();ctx.arc(c.x,c.y,c.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;if(!c.taken&&Math.hypot(bird.x-c.x,bird.y-c.y)<bird.r+c.r){c.taken=true;score+=10}}
-  pipes=pipes.filter(p=>p.x>-100);coins=coins.filter(c=>c.x>-30&&!c.taken);
-  if(bird.y<0||bird.y>H()){endGame();return}
-  ctx.fillStyle="#ffd93d";ctx.beginPath();ctx.arc(bird.x,bird.y,bird.r,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(bird.x+8,bird.y-7,7,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#111";ctx.beginPath();ctx.arc(bird.x+10,bird.y-7,3,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle="#ff7b00";ctx.fillRect(bird.x+20,bird.y,15,8);
-  score+=.012*d;gameScore.textContent=Math.floor(score);animation=requestAnimationFrame(flappyLoop);
-}
+KEYBOARD + MOUSE
+===================================================== */
+
+window.onkeydown=e=>{
+
+    keys[e.code]=true;
+
+
+    if(e.code==="Space"){
+
+        e.preventDefault();
+
+
+        if(currentGame==="cube")
+            cubeJump();
+
+
+        if(currentGame==="flappy")
+            flap();
+
+    }
+
+};
+
+
+window.onkeyup=e=>{
+
+    keys[e.code]=false;
+
+};
+
+
+canvas.onmousemove=e=>{
+
+    mouseX=e.clientX;
+
+    mouseY=e.clientY;
+
+};
+
+
+canvas.onmousedown=e=>{
+
+    mouseDown=true;
+
+};
+
+
+window.onmouseup=()=>{
+
+    mouseDown=false;
+
+};
+
 
 /* =====================================================
-   GAME 4 — BLOCK BREAKER: powerups + levels + lives
-   ===================================================== */
-let paddle,ball,bricks=[],breakLives=3,breakLevel=1,breakPower=[];
-function startBreakout(){
-  currentGame="breakout";gameRunning=true;score=0;breakLives=3;breakLevel=1;breakPower=[];
-  paddle={x:W()/2-60,y:H()-60,w:120,h:15};ball={x:W()/2,y:H()-100,vx:5,vy:-5,r:9};buildBricks();
-  hudTitle.textContent="🧱 BLOCK BREAKER";gameInfo.textContent="Mouse / A-D / touch = paddle";
-  breakoutLoop(performance.now());
-}
-function buildBricks(){bricks=[];const cols=Math.max(5,Math.floor(W()/90)),rows=Math.min(7,4+breakLevel);
-  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)bricks.push({x:c*(W()/cols)+6,y:90+r*31,w:W()/cols-12,h:22,alive:true,hp:1+(r>rows-3?1:0)})
-}
-function breakoutLoop(now){
-  if(!gameRunning)return;const d=dt(now);background("#070412","#21104a");
-  paddle.x=(Math.abs(mouseX)>1?mouseX-paddle.w/2:paddle.x)+controls()*9*d;paddle.x=clamp(paddle.x,0,W()-paddle.w);
-  ctx.fillStyle="#00eaff";ctx.shadowBlur=20;ctx.shadowColor="#00eaff";ctx.fillRect(paddle.x,paddle.y,paddle.w,paddle.h);ctx.shadowBlur=0;
-  ball.x+=ball.vx*d;ball.y+=ball.vy*d;
-  if(ball.x<ball.r||ball.x>W()-ball.r)ball.vx*=-1;if(ball.y<ball.r)ball.vy*=-1;
-  if(ball.y+ball.r>paddle.y&&ball.y<paddle.y+paddle.h&&ball.x>paddle.x&&ball.x<paddle.x+paddle.w){
-    const hitPos=(ball.x-(paddle.x+paddle.w/2))/(paddle.w/2);ball.vx=hitPos*7;ball.vy=-Math.abs(ball.vy)
-  }
-  if(ball.y>H()){breakLives--;if(breakLives<=0){endGame();return}resetBall()}
-  let remaining=0;
-  for(const b of bricks){if(!b.alive)continue;remaining++;ctx.fillStyle=["#00eaff","#ff2bd6","#7c4dff","#00ff88","#ffd000"][Math.floor(b.y/31)%5];ctx.fillRect(b.x,b.y,b.w,b.h);
-    if(ball.x>b.x&&ball.x<b.x+b.w&&ball.y>b.y&&ball.y<b.y+b.h){b.hp--;ball.vy*=-1;if(b.hp<=0){b.alive=false;score+=10;if(Math.random()<.08)breakPower.push({x:b.x+b.w/2,y:b.y+10,type:Math.random()<.5?"wide":"life"})}}
-  }
-  for(const p of breakPower){p.y+=3*d;ctx.fillStyle=p.type==="wide"?"#00ff88":"#ffd000";ctx.fillRect(p.x-9,p.y-9,18,18);if(p.y>paddle.y&&p.x>paddle.x&&p.x<paddle.x+paddle.w){if(p.type==="wide")paddle.w=Math.min(180,paddle.w+35);else breakLives++;p.y=H()+100}}
-  breakPower=breakPower.filter(p=>p.y<H()+50);
-  if(remaining===0){breakLevel++;buildBricks();resetBall();break}
-  ctx.fillStyle="#fff";ctx.shadowBlur=20;ctx.shadowColor="#fff";ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-  gameScore.textContent=Math.floor(score);gameExtra.textContent=`  ❤️ ${breakLives}  •  Level ${breakLevel}`;
-  animation=requestAnimationFrame(breakoutLoop);
-}
-function resetBall(){ball.x=W()/2;ball.y=H()-100;ball.vx=(Math.random()<.5?-1:1)*(5+breakLevel*.25);ball.vy=-(5+breakLevel*.25)}
+PHONE TOUCH INPUT
+===================================================== */
 
-/* Reset mobile touch states when leaving a game */
-document.addEventListener("visibilitychange",()=>{if(document.hidden){Object.keys(touch).forEach(k=>touch[k]=false);mouseDown=false}});
+function setCanvasTouch(e){
+
+    const t=
+        e.touches[0] ||
+        e.changedTouches[0];
+
+
+    if(!t)return;
+
+
+    const rect=
+        canvas.getBoundingClientRect();
+
+
+    mouseX=
+        (t.clientX-rect.left)*
+        (canvas.width/rect.width);
+
+
+    mouseY=
+        (t.clientY-rect.top)*
+        (canvas.height/rect.height);
+
+}
+
+
+canvas.addEventListener(
+    "touchstart",
+    e=>{
+
+        e.preventDefault();
+
+        touchActive=true;
+
+        setCanvasTouch(e);
+
+
+        if(currentGame==="flappy")
+            flap();
+
+
+        if(currentGame==="cube")
+            cubeJump();
+
+
+        if(currentGame==="shooter")
+            mouseDown=true;
+
+    },
+    {passive:false}
+);
+
+
+canvas.addEventListener(
+    "touchmove",
+    e=>{
+
+        e.preventDefault();
+
+        setCanvasTouch(e);
+
+
+        if(
+            currentGame==="breakout"
+        ){
+
+            paddle.x=
+                mouseX-
+                paddle.width/2;
+
+        }
+
+    },
+    {passive:false}
+);
+
+
+canvas.addEventListener(
+    "touchend",
+    e=>{
+
+        e.preventDefault();
+
+        setCanvasTouch(e);
+
+        touchActive=false;
+
+        mouseDown=false;
+
+    },
+    {passive:false}
+);
+
+
+canvas.addEventListener(
+    "touchcancel",
+    ()=>{
+
+        touchActive=false;
+
+        mouseDown=false;
+
+    },
+    {passive:false}
+);
+
+
+/* =====================================================
+BACKGROUND
+===================================================== */
+
+function background(
+    color1="#030712",
+    color2="#102d55"
+){
+
+    const g=
+        ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            canvas.height
+        );
+
+
+    g.addColorStop(
+        0,
+        color1
+    );
+
+
+    g.addColorStop(
+        1,
+        color2
+    );
+
+
+    ctx.fillStyle=g;
+
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+
+    for(
+        let i=0;
+        i<70;
+        i++
+    ){
+
+        const x=
+            (i*137)%
+            canvas.width;
+
+
+        const y=
+            (i*73)%
+            canvas.height;
+
+
+        ctx.fillStyle="#ffffff55";
+
+
+        ctx.fillRect(
+            x,
+            y,
+            2,
+            2
+        );
+
+    }
+
+}
+            gameScore.textContent=score;
+
+        animation=
+        requestAnimationFrame(
+            breakoutLoop
+        );
+
+    }
+
 </script>
+
 </body>
 </html>
